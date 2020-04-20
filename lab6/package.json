@@ -1,0 +1,33 @@
+{
+  "name": "scriptlanglab6",
+  "version": "1.0.0",
+  "scripts": {
+    "start:api": "npx cross-env NAME=World NODE_ENV=api node api/app.js",
+    "start:proxy": "npx cross-env NODE_ENV=proxy node proxy/app.js",
+    "start:proxy-container": "npx cross-env NODE_ENV=proxy-container node proxy/app.js",
+    "prepare-test-env": "node proxy/services/database/models/createDB.js",
+    "test": "npm run prepare-test-env && npx cross-env NODE_ENV=test jest"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "child_process": "^1.0.2",
+    "convict": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "factory-girl": "^5.0.4",
+    "jest": "^25.3.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.6",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "nock": "^12.0.3"
+  }
+}

@@ -1,0 +1,43 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lab-app-proxy
+  namespace: default
+  labels:
+    app: lab-app-proxy
+  annotations:
+    deployment.kubernetes.io/revision: '4'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-app-proxy
+  template:
+    metadata:
+      labels:
+        app: lab-app-proxy
+    spec:
+      containers:
+        - name: lab-app-proxy
+          image: lab-app-proxy
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+          resources: {}
+          imagePullPolicy: Never
+      initContainers:
+        - name: init-lab-app-database
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup lab-app-database.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for lab-app-database; sleep 2; done"]
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

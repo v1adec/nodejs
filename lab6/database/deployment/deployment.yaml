@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lab-app-database
+  namespace: default
+  labels:
+    app: lab-app-database
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-app-database
+  template:
+    metadata:
+      labels:
+        app: lab-app-database
+    spec:
+      containers:
+        - name: lab-app-database
+          image: lab-app-database
+          resources: {}
+          imagePullPolicy: Never
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

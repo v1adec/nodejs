@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: lab-app-proxy
+  namespace: default
+  labels:
+    app: lab-app-proxy
+spec:
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+  selector:
+    app: lab-app-proxy
+  type: NodePort
+  sessionAffinity: None

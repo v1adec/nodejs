@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: lab-app-api
+  namespace: default
+  labels:
+    app: lab-app-api
+spec:
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  selector:
+    app: lab-app-api
+  type: NodePort

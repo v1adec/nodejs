@@ -1,0 +1,7 @@
+{
+    "ip": "0.0.0.0",
+    "port": 3001,
+    "api_url": "http://127.0.0.1:3000",
+    "database": "main_db",
+    "database_url": "127.0.0.1"
+}

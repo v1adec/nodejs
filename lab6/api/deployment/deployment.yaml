@@ -1,0 +1,40 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lab-app-api
+  namespace: default
+  labels:
+    app: lab-app-api
+  annotations:
+    deployment.kubernetes.io/revision: '4'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-app-api
+  template:
+    metadata:
+      labels:
+        app: lab-app-api
+    spec:
+      containers:
+        - name: lab-app-api
+          image: lab-app-api
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          resources: {}
+          imagePullPolicy: Never
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+  
