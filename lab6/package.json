@@ -15,7 +15,7 @@
     ]
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "child_process": "^1.0.2",
     "convict": "^5.2.0",
     "cross-env": "^7.0.2",
